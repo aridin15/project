@@ -1,19 +1,40 @@
 steps:
+
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'flask-app'
-    args: ['build', '-t', 'gcr.io/node-443017/flask-app', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/flask-app', '.']
+
 
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'node-app'
-    args: ['build', '-t', 'gcr.io/node-443017/node-app', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/node-app', '.']
+
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/node-443017/flask-app']
+    args: ['push', 'gcr.io/$PROJECT_ID/flask-app']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/node-443017/node-app']
+    args: ['push', 'gcr.io/$PROJECT_ID/node-app']
+
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['container', 'clusters', 'get-credentials', 'my-cluster', '--zone', 'us-central1-a']
+
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/flask-deployment.yaml']
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/flask-service.yaml']
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/nodejs-deployment.yaml']
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/nodejs-service.yaml']
 
 images:
-  - 'gcr.io/node-443017/flask-app'
-  - 'gcr.io/node-443017/node-app'
+  - 'gcr.io/$PROJECT_ID/flask-app'
+  - 'gcr.io/$PROJECT_ID/node-app'
+
 options:
   logging: CLOUD_LOGGING_ONLY
