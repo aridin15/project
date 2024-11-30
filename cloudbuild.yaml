@@ -1,0 +1,17 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'flask-app'
+    args: ['build', '-t', 'gcr.io/node-443017/flask-app', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'node-app'
+    args: ['build', '-t', 'gcr.io/node-443017/node-app', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/node-443017/flask-app']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/node-443017/node-app']
+
+images:
+  - 'gcr.io/node-443017/flask-app'
+  - 'gcr.io/node-443017/node-app'
