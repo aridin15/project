@@ -15,48 +15,56 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/node-app']
 
-  # התחברות ל-Cluster של GKE והכנת קובץ kubeconfig
+  # התחברות ל-Cluster של GKE והעתקת kubeconfig
   - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Get GKE credentials'
+    entrypoint: 'bash'
     args:
-      - 'container'
-      - 'clusters'
-      - 'get-credentials'
-      - 'my-cluster'
-      - '--region'
-      - 'us-west2'
-      - '--project'
-      - '$PROJECT_ID'
+      - '-c'
+      - |
+        gcloud container clusters get-credentials my-cluster --region us-west2 --project $PROJECT_ID
+        # העתקת kubeconfig למיקום משותף
+        mkdir -p /workspace/.kube
+        cp $HOME/.kube/config /workspace/.kube/
     volumes:
       - name: 'kubeconfig'
-        path: '/root/.kube'
+        path: '/workspace/.kube'
 
   # פריסת ה-Flask Deployment
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/flask-deployment.yaml']
+    env:
+      - 'KUBECONFIG=/workspace/.kube/config'
     volumes:
       - name: 'kubeconfig'
-        path: '/root/.kube'
+        path: '/workspace/.kube'
 
   # פריסת ה-Flask Service
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/flask-service.yaml']
+    env:
+      - 'KUBECONFIG=/workspace/.kube/config'
     volumes:
       - name: 'kubeconfig'
-        path: '/root/.kube'
+        path: '/workspace/.kube'
 
   # פריסת ה-Node.js Deployment
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/nodejs-deployment.yaml']
+    env:
+      - 'KUBECONFIG=/workspace/.kube/config'
     volumes:
       - name: 'kubeconfig'
-        path: '/root/.kube'
+        path: '/workspace/.kube'
 
   # פריסת ה-Node.js Service
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/nodejs-service.yaml']
+    env:
+      - 'KUBECONFIG=/workspace/.kube/config'
     volumes:
       - name: 'kubeconfig'
-        path: '/root/.kube'
+        path: '/workspace/.kube'
 
 images:
   - 'gcr.io/$PROJECT_ID/flask-app'
