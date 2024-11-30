@@ -17,7 +17,7 @@ steps:
 
 
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['container', 'clusters', 'get-credentials', 'my-cluster', '--zone', 'us-central1-a']
+    args: ['container', 'clusters', 'get-credentials', 'my-cluster', '--zone', 'us-west2']
 
 
   - name: 'gcr.io/cloud-builders/kubectl'
