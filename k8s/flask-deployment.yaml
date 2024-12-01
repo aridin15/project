@@ -65,7 +65,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: gcr.io/PROJECT_ID/flask-app:IMAGE_TAG
+        image: gcr.io/PROJECT_ID/flask-app2:IMAGE_TAG
         ports:
         - containerPort: 5000
         imagePullPolicy: Always

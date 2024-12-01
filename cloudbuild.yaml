@@ -17,13 +17,13 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA']
 
   # החלפת PROJECT_ID ו-IMAGE_TAG בקבצי ה-Deployment
-#  - name: 'gcr.io/cloud-builders/gcloud'
-#    entrypoint: 'bash'
-#    args:
-#      - '-c'
-#      - |
-#        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
-#        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
+        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
 
 
   # פריסת המשאבים ל-Cluster באמצעות ADC
