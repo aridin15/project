@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 const axios = require('axios')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config()
 
-dotenv.config()
+// dotenv.config()
 
 app.get('/api/node', (req, res) => {
   res.send('Hello, World from Node.js!');
