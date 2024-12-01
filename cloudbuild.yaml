@@ -11,7 +11,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA']
 
-  # החלפת תגיות התמונות בקבצי ה-Kubernetes
+  # החלפת IMAGE_TAG בקבצי ה-Kubernetes
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -20,24 +20,17 @@ steps:
         sed -i 's|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
         sed -i 's|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
 
-  # אימות מול ה-Cluster של GKE
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'container'
-      - 'clusters'
-      - 'get-credentials'
-      - 'my-cluster'          # החלף בשם ה-Cluster שלך
-      - '--region'
-      - 'us-west2'            # החלף באזור שלך
-      - '--project'
-      - '$PROJECT_ID'
-
-  # פריסת המשאבים ל-Cluster
+  # פריסת המשאבים ל-Cluster באמצעות ADC
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'apply'
       - '-f'
       - 'k8s/'
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-west2'         # החלף באזור שלך
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster'    # החלף בשם ה-Cluster שלך
+      - 'CLOUDSDK_CORE_PROJECT=$PROJECT_ID'
+      - 'CLOUDSDK_CONTAINER_USE_APPLICATION_DEFAULT_CREDENTIALS=true'
 
 images:
   - 'gcr.io/$PROJECT_ID/flask-app:$SHORT_SHA'
