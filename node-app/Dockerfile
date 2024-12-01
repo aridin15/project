@@ -1,11 +1,12 @@
-FROM node:14
+FROM node:18
 
 WORKDIR /usr/src/app
 
+RUN npm install -g pnpm
 
 COPY package.json .
 
-RUN npm install
+RUN pnpm install
 
 
 COPY server.js .
