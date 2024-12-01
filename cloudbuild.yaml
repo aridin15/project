@@ -5,6 +5,11 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/flask-app:$SHORT_SHA']
 
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/flask-app2:$SHORT_SHA', './flask-app2' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'gcr.io/$PROJECT_ID/flask-app2:$SHORT_SHA' ]
+
   # בניית ודחיפת תמונת Docker ל-Node.js
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA', './node-app']
@@ -12,13 +17,13 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA']
 
   # החלפת PROJECT_ID ו-IMAGE_TAG בקבצי ה-Deployment
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
-        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
+#  - name: 'gcr.io/cloud-builders/gcloud'
+#    entrypoint: 'bash'
+#    args:
+#      - '-c'
+#      - |
+#        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
+#        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
 
 
   # פריסת המשאבים ל-Cluster באמצעות ADC
@@ -32,11 +37,15 @@ steps:
       - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster'    # החלף בשם ה-Cluster שלך
       - 'CLOUDSDK_CORE_PROJECT=$PROJECT_ID'
       - 'CLOUDSDK_CONTAINER_USE_APPLICATION_DEFAULT_CREDENTIALS=true'
+      #application default credentials(ADC) is a mechanism that allow tools and applications
+      #to get credentials automatically to verify against gcp as part of google sdk.|
+      #in this case it allowing kubectl get access to the GKE cluster without need to manage credentials manually or through kubeconfig
 
 images:
   - 'gcr.io/$PROJECT_ID/flask-app:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/flask-app2:$SHORT_SHA'
   - 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA'
 
 options:
-  substitution_option: 'ALLOW_LOOSE'
+  substitution_option: 'ALLOW_LOOSE' #allowing to use variables that weren't defined ahead
   logging: CLOUD_LOGGING_ONLY

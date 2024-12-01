@@ -1,22 +1,48 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: nodejs-app
+#  labels:
+#    app: nodejs-app
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: nodejs-app
+#  template:
+#    metadata:
+#      labels:
+#        app: nodejs-app
+#    spec:
+#      containers:
+#      - name: nodejs-container
+#        image: gcr.io/PROJECT_ID/node-app:IMAGE_TAG
+#        ports:
+#        - containerPort: 3000
+#        imagePullPolicy: Always
+# node-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodejs-app
-  labels:
-    app: nodejs-app
+  name: node-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: nodejs-app
+      app: node
   template:
     metadata:
       labels:
-        app: nodejs-app
+        app: node
     spec:
       containers:
-      - name: nodejs-container
+      - name: node
         image: gcr.io/PROJECT_ID/node-app:IMAGE_TAG
         ports:
         - containerPort: 3000
-        imagePullPolicy: Always
+        env:
+        - name: FLASK_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: node-config
+              key: FLASK_API_URL

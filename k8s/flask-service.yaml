@@ -4,8 +4,9 @@ metadata:
   name: flask-service
 spec:
   type: ClusterIP
+  selector:
+    app: flask
+    version: blue
   ports:
   - port: 5000
     targetPort: 5000
-  selector:
-    app: flask-app

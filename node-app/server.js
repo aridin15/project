@@ -8,7 +8,7 @@ app.get('/api/node', (req, res) => {
 
 app.post('/api/fetch',async (req, res)=>{
   try {
-    const result = await axios.get('http://35.236.33.159/api/flask');
+    const result = await axios.get(process.env.FLASK_URI);
     res.status(200).json({
       data: result.data
     })
