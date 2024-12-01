@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: nodejs-container
-        image: gcr.io/PROJECT_ID/node-app
+        image: gcr.io/$PROJECT_ID/node-app
         ports:
         - containerPort: 3000

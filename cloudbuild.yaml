@@ -1,73 +1,48 @@
 steps:
-
+  # בניית ודחיפת תמונת Docker ל-Flask
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'flask-app'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/flask-app', '.']
-
-
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/flask-app:$SHORT_SHA', './flask-app']
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'node-app'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/node-app', '.']
+    args: ['push', 'gcr.io/$PROJECT_ID/flask-app:$SHORT_SHA']
 
-
+  # בניית ודחיפת תמונת Docker ל-Node.js
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/flask-app']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA', './node-app']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/node-app']
+    args: ['push', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA']
 
-
+  # החלפת תגיות התמונות בקבצי ה-Kubernetes
   - name: 'gcr.io/cloud-builders/gcloud'
-    id: 'Get GKE credentials'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials my-cluster --region us-west2 --project $PROJECT_ID
-        mkdir -p /workspace/.kube
-        cp /root/.kube/config /workspace/.kube/
-    volumes:
-      - name: 'kubeconfig'
-        path: '/workspace/.kube'
+        sed -i 's|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
+        sed -i 's|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
 
-  # פריסת ה-Flask Deployment
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'k8s/flask-deployment.yaml']
-    env:
-      - 'KUBECONFIG=/workspace/.kube/config'
-    volumes:
-      - name: 'kubeconfig'
-        path: '/workspace/.kube'
+  # אימות מול ה-Cluster של GKE
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'container'
+      - 'clusters'
+      - 'get-credentials'
+      - 'my-cluster'          # החלף בשם ה-Cluster שלך
+      - '--region'
+      - 'us-west2'            # החלף באזור שלך
+      - '--project'
+      - '$PROJECT_ID'
 
-  # פריסת ה-Flask Service
+  # פריסת המשאבים ל-Cluster
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'k8s/flask-service.yaml']
-    env:
-      - 'KUBECONFIG=/workspace/.kube/config'
-    volumes:
-      - name: 'kubeconfig'
-        path: '/workspace/.kube'
-
-  # פריסת ה-Node.js Deployment
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'k8s/nodejs-deployment.yaml']
-    env:
-      - 'KUBECONFIG=/workspace/.kube/config'
-    volumes:
-      - name: 'kubeconfig'
-        path: '/workspace/.kube'
-
-  # פריסת ה-Node.js Service
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'k8s/nodejs-service.yaml']
-    env:
-      - 'KUBECONFIG=/workspace/.kube/config'
-    volumes:
-      - name: 'kubeconfig'
-        path: '/workspace/.kube'
+    args:
+      - 'apply'
+      - '-f'
+      - 'k8s/'
 
 images:
-  - 'gcr.io/$PROJECT_ID/flask-app'
-  - 'gcr.io/$PROJECT_ID/node-app'
+  - 'gcr.io/$PROJECT_ID/flask-app:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA'
 
 options:
+  substitution_option: 'ALLOW_LOOSE'
   logging: CLOUD_LOGGING_ONLY
