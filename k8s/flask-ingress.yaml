@@ -5,6 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/whitelist-source-range: "2.54.35.68/32, 31.187.78.23/32"
+    nginx.ingress.kubernetes.io/limit-rpm: "5"
 spec:
   rules:
   - http:
