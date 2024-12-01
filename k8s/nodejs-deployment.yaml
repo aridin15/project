@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nodejs-container
-        image: gcr.io/PROJECT_ID/node-app:IMAGE_TAG
+        image: gcr.io/$(PROJECT_ID)/node-app:$(IMAGE_TAG)
         ports:
         - containerPort: 3000
         imagePullPolicy: Always
