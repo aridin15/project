@@ -11,14 +11,24 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/node-app:$SHORT_SHA']
 
-  # החלפת IMAGE_TAG בקבצי ה-Kubernetes
+  # החלפת PROJECT_ID ו-IMAGE_TAG בקבצי ה-Deployment
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        sed -i 's|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
-        sed -i 's|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
+        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
+        sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
+
+  # שלב לבדיקת תוכן הקבצים לאחר ההחלפה (אופציונלי)
+  - name: 'alpine'
+    entrypoint: 'cat'
+    args:
+      - 'k8s/flask-deployment.yaml'
+  - name: 'alpine'
+    entrypoint: 'cat'
+    args:
+      - 'k8s/nodejs-deployment.yaml'
 
   # פריסת המשאבים ל-Cluster באמצעות ADC
   - name: 'gcr.io/cloud-builders/kubectl'

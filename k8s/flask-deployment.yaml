@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app
+  labels:
+    app: flask-app
 spec:
   replicas: 1
   selector:
@@ -14,6 +16,7 @@ spec:
     spec:
       containers:
       - name: flask-container
-        image: gcr.io/$PROJECT_ID/flask-app
+        image: gcr.io/PROJECT_ID/flask-app:IMAGE_TAG
         ports:
         - containerPort: 5000
+        imagePullPolicy: Always
