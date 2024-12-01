@@ -1,12 +1,17 @@
 const express = require('express');
 const app = express();
 const axios = require('axios')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 app.get('/api/node', (req, res) => {
   res.send('Hello, World from Node.js!');
 });
 
 app.post('/api/fetch',async (req, res)=>{
+  console.log('indide api fetch')
+  console.log(`process env flask uri is: ${process.env.FLASK_URI}`)
   try {
     const result = await axios.get(process.env.FLASK_URI);
     res.status(200).json({
