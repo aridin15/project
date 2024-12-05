@@ -12,7 +12,7 @@ metadata:
 spec:
   rules:
     # Rule for Node.js service
-    - host: www.node.mashcantas.com
+    - host: node.mashcantas.com
       http:
         paths:
           - path: /api/node
