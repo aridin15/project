@@ -16,7 +16,7 @@ spec:
     - host: www.node.mashcantas.com
       http:
         paths:
-          - path: /api/node
+          - path: /
             pathType: Prefix
             backend:
               service:
