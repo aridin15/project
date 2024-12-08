@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: node-ingress
   annotations:
-    networking.gke.io/managed-certificates: "multi-cert"
+#    networking.gke.io/managed-certificates: "multi-cert"
     nginx.ingress.kubernetes.io/server-snippet: |
       if ($scheme = http) {
           return 403;
