@@ -22,6 +22,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nodejs-service
+                name: flask-service
                 port:
                   number: 5000
