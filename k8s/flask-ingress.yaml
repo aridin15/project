@@ -11,9 +11,9 @@ metadata:
     nginx.ingress.kubernetes.io/limit-rate-after: "0"
     nginx.ingress.kubernetes.io/whitelist-source-range: "10.124.0.0/16"
     networking.gke.io/managed-certificates: "multi-cert"
-    nginx.ingress.kubernetes.io/server-snippet: |
+    nginx.org/server-snippets: |
       if ($scheme = http) {
-        return 403;
+          return 403;
       }
 spec:
   ingressClassName: nginx

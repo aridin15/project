@@ -6,9 +6,9 @@ metadata:
     kubernetes.io/ingress.class: "nginx"  # Ensure this matches your Ingress controller
     # Add any other necessary annotations here
     networking.gke.io/managed-certificates: "multi-cert"
-    nginx.ingress.kubernetes.io/server-snippet: |
+    nginx.org/server-snippets: |
       if ($scheme = http) {
-        return 403;
+          return 403;
       }
 spec:
   ingressClassName: nginx
