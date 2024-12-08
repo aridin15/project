@@ -4,3 +4,4 @@ metadata:
   name: flask-config
 data:
   active-version: blue
+  allow-snippet-annotations: "true"

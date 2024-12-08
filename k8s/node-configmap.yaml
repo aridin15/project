@@ -4,3 +4,4 @@ metadata:
   name: node-configmap
 data:
   FLASK_API_URL: http://flask-service:5000/api/flask
+  allow-snippet-annotations: "true"

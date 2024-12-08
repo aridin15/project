@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory  # (1)
+    email: arielamar1995@gmail.com                          # (2)
+    privateKeySecretRef:
+      name: letsencrypt-prod                                # (3)
+    solvers:                                                # (4)
+    - http01:                                               # (5)
+        ingress:
+          class: nginx                                      # (6)
+server:
+
+#URL of the ACME server. This is Let's Encrypt's production server. Use https://acme-staging-v02.api.letsencrypt.org/directory for testing to avoid hitting rate limits.
+#email:
+#
+#Contact email for renewal notices and important updates from Let's Encrypt.
+#privateKeySecretRef:
+#
+#Name of the Kubernetes Secret where cert-manager will store the ACME account's private key.
+#solvers:
+#
+#Defines how cert-manager will solve ACME challenges to prove domain ownership.
+#http01:
+#
+#Specifies using the HTTP-01 challenge type.
+#ingress.class:
+#
+#Indicates the Ingress Controller to use for challenge provisioning. Ensure it matches your NGINX Ingress class (nginx).

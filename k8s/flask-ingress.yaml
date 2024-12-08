@@ -4,7 +4,8 @@ metadata:
   name: flask-ingress
   annotations:
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
-#    nginx.ingress.kubernetes.io/enable-cache: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/enable-cache: "false"
     nginx.ingress.kubernetes.io/limit-rpm: "5"
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
     nginx.ingress.kubernetes.io/limit-rate-after: "0"
@@ -16,9 +17,12 @@ metadata:
       }
 
 spec:
-  ingressClassName: nginx
+  ingressClassName: nginx                                   # (4)
+  tls:
+    - hosts:
+        - flask.mashcantas.com                             # (5)
+      secretName: flask-tls                                 # (6)
   rules:
-    # Rule for Node.js service
     - host: flask.mashcantas.com
       http:
         paths:

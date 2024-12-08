@@ -2,15 +2,18 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: node-ingress
-  annotations:
-#    networking.gke.io/managed-certificates: "multi-cert"
-    nginx.ingress.kubernetes.io/server-snippet: |
+  annotations:                 # (1)
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"      # (2)
+    nginx.ingress.kubernetes.io/server-snippet: |          # (3)
       if ($scheme = http) {
           return 403;
       }
-
 spec:
-  ingressClassName: nginx
+  ingressClassName: nginx                                   # (4)
+  tls:
+    - hosts:
+        - node.mashcantas.com                              # (5)
+      secretName: node-tls                                  # (6)
   rules:
     - host: node.mashcantas.com
       http:
