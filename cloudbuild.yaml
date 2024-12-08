@@ -25,13 +25,10 @@ steps:
         sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/flask-deployment.yaml
         sed -i 's|PROJECT_ID|'"$PROJECT_ID"'|g; s|IMAGE_TAG|'"$SHORT_SHA"'|g' k8s/nodejs-deployment.yaml
 
-
   # פריסת המשאבים ל-Cluster באמצעות ADC
   - name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - 'apply'
-      - '-f'
-      - 'k8s/'
+    args: ['apply', '-f', 'k8s/']
+
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-west2'         # החלף באזור שלך
       - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster1'    # החלף בשם ה-Cluster שלך
