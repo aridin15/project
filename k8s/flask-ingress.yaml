@@ -4,13 +4,14 @@ metadata:
   name: flask-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"  # Ensure this matches your Ingress controller
-    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+#    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
     nginx.ingress.kubernetes.io/enable-cache: "false"
     nginx.ingress.kubernetes.io/limit-rpm: "5"
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
     nginx.ingress.kubernetes.io/limit-rate-after: "0"
     nginx.ingress.kubernetes.io/whitelist-source-range: "10.124.0.0/16"
 spec:
+  ingressClassName: nginx
   rules:
     # Rule for Node.js service
     - host: flask.mashcantas.com
