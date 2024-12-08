@@ -24,4 +24,4 @@ spec:
               service:
                 name: nodejs-service
                 port:
-                  number: 3000
+                  number: 5000
