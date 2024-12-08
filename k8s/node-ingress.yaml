@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"  # Ensure this matches your Ingress controller
     # Add any other necessary annotations here
     networking.gke.io/managed-certificates: "multi-cert"
-    networking.gke.io/v1beta1.FrontendConfig: "frontend-config"
+    kubernetes.io/ingress.allow-http: "false"
 spec:
   ingressClassName: nginx
   rules:
