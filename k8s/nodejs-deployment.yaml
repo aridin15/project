@@ -45,5 +45,5 @@ spec:
         - name: FLASK_API_URL
           valueFrom:
             configMapKeyRef:
-              name: node-config
+              name: node-configmap
               key: FLASK_API_URL
