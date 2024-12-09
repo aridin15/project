@@ -12,7 +12,7 @@ spec:
     - http01:                                               # (5)
         ingress:
           class: nginx                                      # (6)
-server:
+
 
 #URL of the ACME server. This is Let's Encrypt's production server. Use https://acme-staging-v02.api.letsencrypt.org/directory for testing to avoid hitting rate limits.
 #email:
