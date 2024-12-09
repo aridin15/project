@@ -3,25 +3,14 @@ kind: Ingress
 metadata:
   name: flask-ingress
   annotations:
-    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/enable-cache: "false"
-    nginx.ingress.kubernetes.io/limit-rpm: "5"
-    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
-    nginx.ingress.kubernetes.io/limit-rate-after: "0"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.124.0.0/16"
-#    networking.gke.io/managed-certificates: "multi-cert"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      if ($scheme = http) {
-          return 403;
-      }
-
+    networking.gke.io/managed-certificates: "multi-cert"
+    networking.gke.io/ingress.class: "gce"  # Specify GCE Ingress
+    networking.gke.io/allow-http: "false"   # Disable HTTP
+    networking.gke.io/ssl-policy: "MODERN"  # Optional: Define SSL policy
 spec:
-  ingressClassName: nginx                                   # (4)
   tls:
     - hosts:
-        - flask.mashcantas.com                             # (5)
-      secretName: flask-tls                                 # (6)
+        - flask.mashcantas.com
   rules:
     - host: flask.mashcantas.com
       http:
