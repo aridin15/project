@@ -4,14 +4,14 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory  # (1)
-    email: arielamar1995@gmail.com                          # (2)
+    server: https://acme-v02.api.letsencrypt.org/directory  # ACME server URL
+    email: arielamar1995@gmail.com                          # Contact email
     privateKeySecretRef:
-      name: letsencrypt-prod                                # (3)
-    solvers:                                                # (4)
-    - http01:                                               # (5)
-        ingress:
-          class: nginx                                      # (6)
+      name: letsencrypt-prod                                # Secret for ACME account private key
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
 
 
 #URL of the ACME server. This is Let's Encrypt's production server. Use https://acme-staging-v02.api.letsencrypt.org/directory for testing to avoid hitting rate limits.
