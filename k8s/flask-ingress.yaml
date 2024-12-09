@@ -6,8 +6,8 @@ metadata:
     networking.gke.io/managed-certificates: "multi-cert"
     networking.gke.io/ingress.class: "gce"  # Specify GCE Ingress
     networking.gke.io/allow-http: "true"   # Disable HTTP
-    networking.gke.io/ssl-policy: "MODERN"  # Optional: Define SSL policy
 spec:
+  ingressClassName: gce
   tls:
     - hosts:
         - flask.mashcantas.com
