@@ -5,9 +5,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-app.get('/healthz', (req, res) => {
-  res.status(200).send('OK');
-});
 
 app.get('/api/node', (req, res) => {
   res.send('Hello, World from Node.js!');
