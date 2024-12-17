@@ -1,10 +1,9 @@
 import os
 import json
-# import requests
+import requests
 from google.cloud import secretmanager
 from flask import Flask
 from pymongo import MongoClient
-# from datetime import datetime
 import logging
 
 app = Flask(__name__)
@@ -23,10 +22,8 @@ def access_secret(project_id: str, secret_id: str, version_id: str = "latest") -
         response = client.access_secret_version(request={"name": name})
         return response.payload.data.decode("UTF-8")
     except Exception as e:
-        logger.debug(f"Error accessing secret: {e}")
-        # app.logger.debug(f"Error accessing secret: {e}")
+        logger.error(f"Error accessing secret: {e}")
         raise
-
 
 def setup_mongodb_connection():
     try:
@@ -34,10 +31,12 @@ def setup_mongodb_connection():
         secret_id = os.environ.get("SECRET_ID", "mainMongoUri_dev")  # Default to your secret name
         mongo_secret = access_secret(project_id, secret_id)
 
-        # Parse the JSON string into a dictionary
-        secret_dict = json.loads(mongo_secret)
-        mongo_uri = secret_dict["MONGO_URI"]
-
+        # Check if secret is a JSON or plain URI
+        if mongo_secret.strip().startswith("{"):
+            secret_dict = json.loads(mongo_secret)
+            mongo_uri = secret_dict["MONGO_URI"]
+        else:
+            mongo_uri = mongo_secret.strip()
 
         # Create MongoDB client
         client = MongoClient(mongo_uri)
@@ -45,14 +44,11 @@ def setup_mongodb_connection():
         # Test the connection
         client.admin.command('ping')
         logger.debug("Successfully connected to MongoDB!")
-        # app.logger.debug("Successfully connected to MongoDB!")
 
         return client
     except Exception as e:
-        logger.debug(f"Failed to connect to MongoDB: {e}")
-        # app.logger.debug(f"Failed to connect to MongoDB: {e}")
+        logger.error(f"Failed to connect to MongoDB: {e}")
         raise
-
 
 # Initialize MongoDB connection when app starts
 try:
@@ -60,47 +56,26 @@ try:
     db = mongo_client["mashcantas-dev-db-cluster"]  # Replace with your database name
     collection = db["dev_tests_v01"]  # Replace with your collection name
 except Exception as e:
-    logger.debug(f"Failed to initialize MongoDB: {e}")
-    # app.logger.debug(f"Failed to initialize MongoDB: {e}")
+    logger.error(f"Failed to initialize MongoDB: {e}")
     raise
-
-
-# Example write route: writes the current timestamp
-# @app.route('/api/flask/write', methods=['POST'])
-# def write_timestamp():
-#     now = datetime.datetime.now()
-#     doc = {"timestamp": now}
-#     try:
-#         logger.debug("doc is: ", doc)
-#         app.logger.debug("doc is: ", doc)
-#         result = collection.insert_one(doc)
-#         logger.debug("insert one result: ", result)
-#         app.logger.debug("insert one result: ", result)
-#         return jsonify({"message": "Timestamp written", "timestamp": now.isoformat()}), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-#
-#
-# # Example read route: reads the last written timestamp
-# @app.route('/api/flask/read', methods=['GET'])
-# def read_last_timestamp():
-#     try:
-#         doc = collection.find().sort("_id", -1).limit(1)
-#         last_doc = next(doc, None)
-#         if last_doc:
-#             return jsonify({"last_timestamp": last_doc["timestamp"].isoformat()}), 200
-#         else:
-#             return jsonify({"message": "No timestamps found"}), 404
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
 
 # Health check route
 @app.route('/healthz')
 def healthz():
-    return "OK", 200
+    try:
+        mongo_client.admin.command('ping')
+        return "OK", 200
+    except Exception as e:
+        logger.error(f"MongoDB connection failed: {e}")
+        return "MongoDB connection failed", 500
 
+@app.route('/api/flask')
+def hello_world():
+    # Insert a test document into MongoDB
+    test_document = {"message": "Hello from Flasky!"}
+    collection.insert_one(test_document)
+
+    return 'Hello, World from Flasky! Document inserted into MongoDB!'
 
 if __name__ == '__main__':
-
     app.run(host='0.0.0.0', port=5000)
