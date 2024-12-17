@@ -72,7 +72,7 @@ def healthz():
 @app.route('/api/flask')
 def hello_world():
     # Insert a test document into MongoDB
-    test_document = {"message": "Hello from Flasky!"}
+    test_document = {"message": "Hello from Flaskyy!"}
     collection.insert_one(test_document)
 
     return 'Hello, World from Flasky! Document inserted into MongoDB!'
