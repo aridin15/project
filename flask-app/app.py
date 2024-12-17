@@ -1,10 +1,10 @@
 import os
 import json
-import requests
+# import requests
 from google.cloud import secretmanager
-from flask import Flask, jsonify
+from flask import Flask
 from pymongo import MongoClient
-from datetime import datetime
+# from datetime import datetime
 import logging
 
 app = Flask(__name__)
