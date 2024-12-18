@@ -61,7 +61,8 @@ def periodic_mongo_write():
         try:
             # Create a new MongoDB client for the thread
             thread_client = setup_mongodb_connection()
-            thread_collection = thread_client["mashcantas-dev-db-cluster"]["dev_tests_v01"]
+            thread_db = thread_client["mashcantas-dev-db-cluster"]
+            thread_collection = thread_db["dev_tests_v01"]
 
             # Insert document
             test_document = {"message": "Periodic write from Flask app!"}
