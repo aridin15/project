@@ -42,7 +42,8 @@ def setup_mongodb_connection():
             mongo_uri = mongo_secret.strip()
 
         # Create MongoDB client
-        client = MongoClient(mongo_uri, tls=True, tlsAllowInvalidCertificates=True)
+        # client = MongoClient(mongo_uri, tls=True, tlsAllowInvalidCertificates=True)
+        client = MongoClient(mongo_uri)
 
         # Test the connection
         # client.admin.command('ping')
