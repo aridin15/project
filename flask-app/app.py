@@ -6,11 +6,21 @@ from google.cloud import secretmanager
 from flask import Flask
 from pymongo import MongoClient
 import logging
+import requests
+
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger('flask')
+
+def get_public_ip():
+    try:
+        response = requests.get('http://ipinfo.io/ip')
+        print("response ip is: ", response)
+        return response.text.strip()
+    except Exception as e:
+        return f"Error: {e}"
 
 def access_secret(project_id: str, secret_id: str, version_id: str = "latest") -> str:
     """
