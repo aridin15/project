@@ -17,7 +17,6 @@ logger = logging.getLogger('flask')
 def get_public_ip():
     try:
         response = requests.get('http://ipinfo.io/ip')
-        print("response ip is: ", response)
         return response.text.strip()
     except Exception as e:
         return f"Error: {e}"
@@ -107,6 +106,6 @@ def hello_world():
     return 'Hello, World from Flasky! Document inserted into MongoDB!'
 
 if __name__ == '__main__':
-    get_public_ip()
+    print(get_public_ip())
     start_background_thread()
     app.run(host='0.0.0.0', port=5000)
