@@ -103,7 +103,7 @@ def hello_world():
     test_document = {"message": "Hello from Flaskyy!"}
     collection.insert_one(test_document)
 
-    return 'Hello, World from Flasky! Document inserted into MongoDB!'
+    return 'Helloo, World from Flasky! Document inserted into MongoDB!'
 
 if __name__ == '__main__':
     print(get_public_ip())
