@@ -40,7 +40,6 @@ def setup_mongodb_connection():
 
         # Create MongoDB client
         client = MongoClient(mongo_uri)
-        client.admin.command('ping')  # Test the connection
         logger.info("Successfully connected to MongoDB!")
 
         return client
