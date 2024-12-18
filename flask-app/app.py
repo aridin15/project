@@ -23,7 +23,7 @@ def access_secret(project_id: str, secret_id: str, version_id: str = "latest") -
         response = client.access_secret_version(request={"name": name})
         return response.payload.data.decode("UTF-8")
     except Exception as e:
-        logger.error(f"Error accessing secret: {e}")
+        # logger.error(f"Error accessing secret: {e}")
         raise
 
 def setup_mongodb_connection():
@@ -46,11 +46,11 @@ def setup_mongodb_connection():
 
         # Test the connection
         client.admin.command('ping')
-        logger.debug("Successfully connected to MongoDB!")
+        # logger.debug("Successfully connected to MongoDB!")
 
         return client
     except Exception as e:
-        logger.error(f"Failed to connect to MongoDB: {e}")
+        # logger.error(f"Failed to connect to MongoDB: {e}")
         raise
 
 # Initialize MongoDB connection when app starts
@@ -59,7 +59,7 @@ try:
     db = mongo_client["mashcantas-dev-db-cluster"]  # Replace with your database name
     collection = db["dev_tests_v01"]  # Replace with your collection name
 except Exception as e:
-    logger.error(f"Failed to initialize MongoDB: {e}")
+    # logger.error(f"Failed to initialize MongoDB: {e}")
     raise
 
 # Health check route
@@ -69,7 +69,7 @@ def healthz():
         mongo_client.admin.command('ping')
         return "OK", 200
     except Exception as e:
-        logger.error(f"MongoDB connection failed: {e}")
+        # logger.error(f"MongoDB connection failed: {e}")
         return "MongoDB connection failed", 500
 
 @app.route('/api/flask')
