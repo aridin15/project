@@ -107,5 +107,6 @@ def hello_world():
     return 'Hello, World from Flasky! Document inserted into MongoDB!'
 
 if __name__ == '__main__':
+    get_public_ip()
     start_background_thread()
     app.run(host='0.0.0.0', port=5000)
