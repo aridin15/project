@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('flask')
 
 def access_secret(project_id: str, secret_id: str, version_id: str = "latest") -> str:
+    print("ariel 1")
     """
     Access the secret from Google Cloud Secret Manager
     """
@@ -27,6 +28,7 @@ def access_secret(project_id: str, secret_id: str, version_id: str = "latest") -
         raise
 
 def setup_mongodb_connection():
+    print("ariel 2")
     try:
         project_id = "mashcantas-dev"
         secret_id = os.environ.get("SECRET_ID", "mainMongoUri_dev")  # Default to your secret name
@@ -36,9 +38,11 @@ def setup_mongodb_connection():
 
         # Check if secret is a JSON or plain URI
         if mongo_secret.strip().startswith("{"):
+            print("ariel3")
             secret_dict = json.loads(mongo_secret)
             mongo_uri = secret_dict["MONGO_URI"]
         else:
+            print("ariel4")
             mongo_uri = mongo_secret.strip()
 
         # Create MongoDB client
@@ -56,6 +60,7 @@ def setup_mongodb_connection():
 # Initialize MongoDB connection when app starts
 try:
     mongo_client = setup_mongodb_connection()
+    print("ariel5")
     db = mongo_client["mashcantas-dev-db-cluster"]  # Replace with your database name
     collection = db["dev_tests_v01"]  # Replace with your collection name
 except Exception as e:
