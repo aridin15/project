@@ -30,9 +30,9 @@ def setup_mongodb_connection():
     try:
         project_id = "mashcantas-dev"
         secret_id = os.environ.get("SECRET_ID", "mainMongoUri_dev")  # Default to your secret name
-        print("secret id is: ", secret_id)
+        print("secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: secret id is: ", secret_id)
         mongo_secret = access_secret(project_id, secret_id)
-        print("mongo secret is:", mongo_secret)
+        print("mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: mongo secret is: ", mongo_secret)
 
         # Check if secret is a JSON or plain URI
         if mongo_secret.strip().startswith("{"):
