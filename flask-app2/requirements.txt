@@ -1,1 +1,3 @@
 flask
+google-cloud-secretmanager
+psycopg2-binary

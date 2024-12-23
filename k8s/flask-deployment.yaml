@@ -63,9 +63,26 @@ spec:
         app: flask
         version: green
     spec:
+      # 1) Use a custom K8s Service Account that is mapped to a Google Service Account
+      #    with roles/secretmanager.secretAccessor so we can read GSM secrets.
+      serviceAccountName: ksa-secrets-access
+
       containers:
       - name: flask
         image: gcr.io/PROJECT_ID/flask-app2:IMAGE_TAG
         ports:
-        - containerPort: 5000
+          - containerPort: 5000
         imagePullPolicy: Always
+
+        # 2) (Optional) We keep some env vars for non-secret info like DB_HOST, DB_NAME.
+        #    DB_USER & DB_PASSWORD are no longer read from a K8s Secret but from GSM at runtime.
+        env:
+          - name: DB_HOST
+            value: "34.165.202.146"
+          - name: DB_NAME
+            value: "mydb"
+
+          # If your app code references GCP_PROJECT or any other variable, define it here:
+          - name: GCP_PROJECT
+            value: "YOUR_GCP_PROJECT_ID"
+
