@@ -94,7 +94,7 @@ def healthz():
     try:
         return "OK", 200
     except Exception as e:
-        logger.error(f"MongoDB connection failed: {e}")
+        logger.error(f"MongoDB connection failedd: {e}")
         return "MongoDB connection failed", 500
 
 @app.route('/api/flask')
