@@ -34,8 +34,8 @@ steps:
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/']
     env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-west2'         # Replace with your region
-      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster1'  # Replace with your cluster name
+      - 'CLOUDSDK_COMPUTE_REGION=me-west1'         # Replace with your region
+      - 'CLOUDSDK_CONTAINER_CLUSTER=mashcantas'  # Replace with your cluster name
       - 'CLOUDSDK_CORE_PROJECT=$PROJECT_ID'
       - 'CLOUDSDK_CONTAINER_USE_APPLICATION_DEFAULT_CREDENTIALS=true'
 
